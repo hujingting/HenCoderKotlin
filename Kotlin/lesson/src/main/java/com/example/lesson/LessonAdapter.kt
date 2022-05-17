@@ -36,6 +36,7 @@ class LessonAdapter : RecyclerView.Adapter<LessonViewHolder>() {
      * 静态内部类
      */
     class LessonViewHolder internal constructor(itemView: View) : BaseViewHolder(itemView) {
+
         fun onBind(lesson: Lesson?) {
             var date = lesson?.date
             if (date == null) {

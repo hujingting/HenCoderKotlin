@@ -12,11 +12,23 @@ import com.example.app.R
 import com.example.core.utils.dp2px
 import kotlin.random.Random
 
-class CodeView : AppCompatTextView {
+class CodeView constructor(context: Context, attributeSet: AttributeSet?) : AppCompatTextView(context, attributeSet) {
 
     constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
+    private val paint = Paint();
+
+    private val codeList = mutableListOf(
+        "kotlin",
+        "android",
+        "java",
+        "http",
+        "https",
+        "okhttp",
+        "retrofit",
+        "tcp/ip")
+
+    init {
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
         gravity = Gravity.CENTER;
         setBackgroundColor(getContext().getColor(R.color.colorPrimary));
@@ -29,18 +41,6 @@ class CodeView : AppCompatTextView {
 
         updateCode();
     }
-
-    val paint = Paint();
-
-    private val codeList = mutableListOf(
-        "kotlin",
-        "android",
-        "java",
-        "http",
-        "https",
-        "okhttp",
-        "retrofit",
-        "tcp/ip")
 
     fun updateCode() {
         val random = Random.nextInt(codeList.size);

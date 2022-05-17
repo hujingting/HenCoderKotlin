@@ -1,17 +1,10 @@
 package com.example.lesson.entity
 
 
-class Lesson {
-
-    var date: String? = null
-    var content: String? = null
-    var state: State? = null
-
-    constructor(date: String?, content: String?, state: State?) {
-        this.date = date
-        this.content = content
-        this.state = state
-    }
+class Lesson constructor(
+    var date: String?,
+    var content: String?,
+    var state: State?) {
 
     enum class State {
         PLAYBACK {
