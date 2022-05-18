@@ -16,7 +16,13 @@ class CodeView constructor(context: Context, attributeSet: AttributeSet?) : AppC
 
     constructor(context: Context) : this(context, null)
 
-    private val paint = Paint();
+    //apply 适合对一个对象做附加操作的时候 （返回自身，作用域中使用this作为参数）
+    private val paint = Paint().apply {
+        isAntiAlias = true;
+        style = Paint.Style.STROKE;
+        color = getContext().getColor(R.color.colorAccent);
+        strokeWidth = dp2px(6f);
+    }
 
     private val codeList = mutableListOf(
         "kotlin",
@@ -34,10 +40,10 @@ class CodeView constructor(context: Context, attributeSet: AttributeSet?) : AppC
         setBackgroundColor(getContext().getColor(R.color.colorPrimary));
         setTextColor(Color.WHITE);
 
-        paint.isAntiAlias = true;
-        paint.style = Paint.Style.STROKE;
-        paint.color = getContext().getColor(R.color.colorAccent);
-        paint.strokeWidth = dp2px(6f);
+//        paint.isAntiAlias = true;
+//        paint.style = Paint.Style.STROKE;
+//        paint.color = getContext().getColor(R.color.colorAccent);
+//        paint.strokeWidth = dp2px(6f);
 
         updateCode();
     }

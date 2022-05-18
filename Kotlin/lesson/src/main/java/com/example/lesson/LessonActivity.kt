@@ -34,15 +34,27 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.inflateMenu(R.menu.menu_lesson)
         toolbar.setOnMenuItemClickListener(this)
-        val recyclerView = findViewById<RecyclerView>(R.id.list)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = lessonAdapter
-        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayout.VERTICAL))
+        findViewById<RecyclerView>(R.id.list).run {
+            layoutManager = LinearLayoutManager(this@LessonActivity)
+            adapter = lessonAdapter
+            addItemDecoration(DividerItemDecoration(this@LessonActivity, LinearLayout.VERTICAL))
+        }
 
-        refreshLayout = findViewById(R.id.swipe_refresh_layout)
-        refreshLayout.setOnRefreshListener(OnRefreshListener { getPresenter().fetchData() })
-        refreshLayout.isRefreshing = true
+        findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout).run {
+            refreshLayout = this
+            setOnRefreshListener(OnRefreshListener { getPresenter().fetchData() })
+            isRefreshing = true
+        }
+
+//        val recyclerView = findViewById<RecyclerView>(R.id.list)
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.adapter = lessonAdapter
+//        recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayout.VERTICAL))
+//
+//        refreshLayout = findViewById(R.id.swipe_refresh_layout)
+//        refreshLayout.setOnRefreshListener(OnRefreshListener { getPresenter().fetchData() })
+//        refreshLayout.isRefreshing = true
 
         getPresenter().fetchData()
     }
