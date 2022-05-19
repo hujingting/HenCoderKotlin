@@ -38,10 +38,10 @@ class LessonAdapter : RecyclerView.Adapter<LessonViewHolder>() {
     class LessonViewHolder internal constructor(itemView: View) : BaseViewHolder(itemView) {
 
         fun onBind(lesson: Lesson?) {
-            var date = lesson?.date
-            if (date == null) {
-                date = "日期待定"
-            }
+            val date = lesson?.date?:"日期待定"
+//            if (date == null) {
+//                date = "日期待定"
+//            }
             setText(R.id.tv_date, date)
             setText(R.id.tv_content, lesson?.content)
 
