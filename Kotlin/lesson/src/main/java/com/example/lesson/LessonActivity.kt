@@ -16,7 +16,7 @@ import android.widget.Toolbar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.example.lesson.entity.Lesson
 
-class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
+class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter>,
     Toolbar.OnMenuItemClickListener {
 
 //    private val lessonPresenter = LessonPresenter(this)
@@ -26,7 +26,7 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
 //    }
 
     // by lazy : 访问的时候才会创建对象且只会创建一次
-    override val p: LessonPresenter? by lazy {
+    override val p: LessonPresenter by lazy {
         return@lazy LessonPresenter(this)
     }
 
@@ -48,7 +48,7 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
 
         findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout).run {
             refreshLayout = this
-            setOnRefreshListener(OnRefreshListener { getPresenter().fetchData() })
+            setOnRefreshListener(OnRefreshListener { p?.fetchData() })
             isRefreshing = true
         }
 
@@ -61,7 +61,7 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
 //        refreshLayout.setOnRefreshListener(OnRefreshListener { getPresenter().fetchData() })
 //        refreshLayout.isRefreshing = true
 
-        getPresenter().fetchData()
+        p.fetchData()
     }
 
     fun showResult(lessons: List<Lesson?>) {
@@ -70,7 +70,7 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        getPresenter().showPlayback()
+        p.showPlayback()
         return false
     }
 }
