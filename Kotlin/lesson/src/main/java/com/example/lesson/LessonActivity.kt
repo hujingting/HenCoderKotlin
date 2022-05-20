@@ -19,10 +19,15 @@ import com.example.lesson.entity.Lesson
 class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter?>,
     Toolbar.OnMenuItemClickListener {
 
-    private val lessonPresenter = LessonPresenter(this)
+//    private val lessonPresenter = LessonPresenter(this)
 
-    override fun getPresenter() : LessonPresenter {
-        return lessonPresenter
+//    override fun getPresenter() : LessonPresenter {
+//        return lessonPresenter
+//    }
+
+    // by lazy : 访问的时候才会创建对象且只会创建一次
+    override val p: LessonPresenter? by lazy {
+        return@lazy LessonPresenter(this)
     }
 
     private val lessonAdapter = LessonAdapter()
