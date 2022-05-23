@@ -11,14 +11,19 @@ import android.view.MotionEvent
 import android.view.View
 import com.hencoder.scalableimageview.dp
 import com.hencoder.scalableimageview.getAvatar
+import kotlin.math.max
+import kotlin.math.min
 
 private val BITMAP_SIZE = 300.dp.toInt()
+private const val EXTRA_SCALE_FRACTION = 1.5f
 
 class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
     , GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
 
     private val bitmap = getAvatar(resources, BITMAP_SIZE)
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var originOffsetX = 0f
+    private var originOffsetY = 0f
     private var offsetX = 0f
     private var offsetY = 0f
     private var smallScale = 0f
@@ -40,15 +45,15 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        offsetX = ((width - bitmap.width) / 2).toFloat()
-        offsetY= ((height - bitmap.height) / 2).toFloat()
+        originOffsetX = ((width - bitmap.width) / 2).toFloat()
+        originOffsetY= ((height - bitmap.height) / 2).toFloat()
 
         if (width / bitmap.width > height / bitmap.height) {
             smallScale = height / bitmap.height.toFloat()
-            bigScale = width / bitmap.width.toFloat()
+            bigScale = width / bitmap.width.toFloat() * EXTRA_SCALE_FRACTION
         } else {
             smallScale = width / bitmap.width.toFloat()
-            bigScale = height / bitmap.height.toFloat()
+            bigScale = height / bitmap.height.toFloat() * EXTRA_SCALE_FRACTION
         }
     }
 
@@ -59,9 +64,10 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        canvas.translate(offsetX, offsetY)
         val scale = smallScale + scaleFraction * (bigScale - smallScale)
         canvas.scale(scale, scale, width / 2f, height / 2f)
-        canvas.drawBitmap(bitmap, offsetX, offsetY, paint)
+        canvas.drawBitmap(bitmap, originOffsetX, originOffsetY, paint)
     }
 
     override fun onDown(e: MotionEvent?): Boolean {
@@ -81,6 +87,17 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         distanceX: Float,
         distanceY: Float
     ): Boolean {
+        if (isScale) {
+            offsetX -= distanceX
+            offsetX = min(offsetX, (bitmap.width * bigScale - width) / 2)
+            offsetX = max(offsetX, - (bitmap.width * bigScale - width) / 2)
+
+            offsetY -= distanceY
+            offsetY = min(offsetY, (bitmap.height * bigScale - height) / 2)
+            offsetY = max(offsetY, - (bitmap.height * bigScale - height) / 2)
+            invalidate()
+        }
+
         return false
     }
 
