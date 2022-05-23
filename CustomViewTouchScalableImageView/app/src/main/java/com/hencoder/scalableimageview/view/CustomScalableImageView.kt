@@ -9,6 +9,9 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.OverScroller
+import android.widget.Scroller
+import androidx.core.view.ViewCompat
 import com.hencoder.scalableimageview.dp
 import com.hencoder.scalableimageview.getAvatar
 import kotlin.math.max
@@ -18,7 +21,7 @@ private val BITMAP_SIZE = 300.dp.toInt()
 private const val EXTRA_SCALE_FRACTION = 1.5f
 
 class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
-    , GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
+    , GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, Runnable {
 
     private val bitmap = getAvatar(resources, BITMAP_SIZE)
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -41,6 +44,10 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     private val scaleAnimator : ObjectAnimator by lazy {
         ObjectAnimator.ofFloat(this, "scaleFraction", 0f, 1f)
     }
+
+    //看成一个滑动的计算器
+    //overScroller 比 scroller 更适合做惯性滑动，不信可以试试
+    private val scroller = OverScroller(context)
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -95,14 +102,11 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
             offsetY -= distanceY
             offsetY = min(offsetY, (bitmap.height * bigScale - height) / 2)
             offsetY = max(offsetY, - (bitmap.height * bigScale - height) / 2)
+
             invalidate()
         }
 
         return false
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
-
     }
 
     override fun onFling(
@@ -111,7 +115,35 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         velocityX: Float,
         velocityY: Float
     ): Boolean {
+        if (isScale) {
+            scroller.fling(
+                offsetX.toInt(), offsetY.toInt(), velocityX.toInt(), velocityY.toInt(),
+                (-(bitmap.width * bigScale - width) / 2).toInt(),
+                ((bitmap.width * bigScale - width) /2).toInt(),
+                (-(bitmap.height * bigScale - height) / 2).toInt(),
+                ((bitmap.height *bigScale - height) / 2).toInt(),
+                30.dp.toInt(), 30.dp.toInt()
+            )
+
+            //下一帧会调用动画
+            ViewCompat.postOnAnimation(this, this)
+        }
         return false
+    }
+
+    override fun run() {
+        //如果动画还没结束，不断更新刷新页面
+        if (scroller.computeScrollOffset()) {
+            offsetX = scroller.currX.toFloat()
+            offsetY = scroller.currY.toFloat()
+            invalidate()
+            //循环调用
+            postOnAnimation(this)
+        }
+    }
+
+    override fun onLongPress(e: MotionEvent?) {
+
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
