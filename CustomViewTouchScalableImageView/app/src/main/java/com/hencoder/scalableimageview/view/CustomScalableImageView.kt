@@ -11,7 +11,6 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.OverScroller
 import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.ScaleGestureDetectorCompat
 import androidx.core.view.ViewCompat
 import com.hencoder.scalableimageview.dp
 import com.hencoder.scalableimageview.getAvatar
@@ -37,19 +36,29 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     private var bigScale = 0f;
     private val customGestureListener = CustomGestureListener()
     private val customScaleGestureListener = CustomScaleGestureListener()
+
     // ScaleGestureDetector 比 ScaleGestureDetectorCompat 功能更全面
     private val scaleGesture = ScaleGestureDetector(context, customScaleGestureListener)
+
     // GestureDetectorCompat 是 GestureDetector的兼容版本
     private val gestureDetector = GestureDetectorCompat(context, customGestureListener)
     private var isScale = false
-    private var scaleFraction = 0f
+//    private var scaleFraction = 0f
+//        set(value) {
+//            field = value
+//            invalidate()
+//        }
+    private var currentScale = 0f
         set(value) {
             field = value
             invalidate()
         }
 
+//    private val scaleAnimator: ObjectAnimator by lazy {
+//        ObjectAnimator.ofFloat(this, "scaleFraction", 0f, 1f)
+//    }
     private val scaleAnimator: ObjectAnimator by lazy {
-        ObjectAnimator.ofFloat(this, "scaleFraction", 0f, 1f)
+        ObjectAnimator.ofFloat(this, "currentScale", smallScale, bigScale)
     }
 
     //看成一个滑动的计算器
@@ -69,10 +78,19 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
             smallScale = width / bitmap.width.toFloat()
             bigScale = height / bitmap.height.toFloat() * EXTRA_SCALE_FRACTION
         }
+
+        currentScale = smallScale
+        //这段代码的作用是什么？似乎不加也可以
+        scaleAnimator.setFloatValues(smallScale, bigScale)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return gestureDetector.onTouchEvent(event)
+        scaleGesture.onTouchEvent(event)
+        //如果没有进行双指缩放
+        if (!scaleGesture.isInProgress) {
+            gestureDetector.onTouchEvent(event)
+        }
+        return true
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -82,9 +100,11 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         // 这样滑动图片才会跟手，否则需要考虑放大系数
         //2. 这里 * scaleFraction，跟着动画系数变化 ，这样缩小图片的时候才不会留白回到正常位置，
         // 相当于重置偏移量（scaleFraction = 0）
+//        canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction)
+//        val scale = smallScale + scaleFraction * (bigScale - smallScale)
+        val scaleFraction = (currentScale - smallScale) / (bigScale - smallScale)
         canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction)
-        val scale = smallScale + scaleFraction * (bigScale - smallScale)
-        canvas.scale(scale, scale, width / 2f, height / 2f)
+        canvas.scale(currentScale, currentScale, width / 2f, height / 2f)
         canvas.drawBitmap(bitmap, originOffsetX, originOffsetY, paint)
     }
 
@@ -173,18 +193,28 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         }
     }
 
-    inner class CustomScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener{
+    inner class CustomScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
 
-        override fun onScale(detector: ScaleGestureDetector?): Boolean {
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            offsetX = (detector.focusX - width / 2) * (1 - bigScale / smallScale)
+            offsetY = (detector.focusY - height / 2) * (1 - bigScale / smallScale)
             return true
         }
 
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val tempCurrentScale = currentScale * detector.scaleFactor
+            if (tempCurrentScale in smallScale..bigScale) {
+                currentScale = tempCurrentScale
+                isScale = true
+                return true
+            }
             return false
         }
 
-        override fun onScaleEnd(detector: ScaleGestureDetector?) {
-
+        override fun onScaleEnd(detector: ScaleGestureDetector) {
+            if (currentScale * detector.scaleFactor <= smallScale) {
+                isScale = false
+            }
         }
 
     }
