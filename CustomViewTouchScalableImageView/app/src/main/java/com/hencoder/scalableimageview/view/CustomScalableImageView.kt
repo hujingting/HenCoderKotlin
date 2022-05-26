@@ -43,7 +43,8 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     // GestureDetectorCompat 是 GestureDetector的兼容版本
     private val gestureDetector = GestureDetectorCompat(context, customGestureListener)
     private var isScale = false
-//    private var scaleFraction = 0f
+
+    //    private var scaleFraction = 0f
 //        set(value) {
 //            field = value
 //            invalidate()
@@ -54,7 +55,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
             invalidate()
         }
 
-//    private val scaleAnimator: ObjectAnimator by lazy {
+    //    private val scaleAnimator: ObjectAnimator by lazy {
 //        ObjectAnimator.ofFloat(this, "scaleFraction", 0f, 1f)
 //    }
     private val scaleAnimator: ObjectAnimator by lazy {
@@ -62,7 +63,8 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     }
 
     //看成一个滑动的计算器
-    //overScroller 比 scroller 更适合做惯性滑动，不信可以试试
+    //overScroller 比 scroller 更适合做惯性滑动，不信可以试试～
+    //用于自动计算滑动的偏移。
     private val scroller = OverScroller(context)
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -110,8 +112,10 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
 
     //配合快滑 onFling（）实现动画
     override fun run() {
+        // 计算此时的位置，并且如果滑动已经结束，就停止
         //如果动画还没结束，不断更新刷新页面
         if (scroller.computeScrollOffset()) {
+            // 把此时的位置应用于界面
             offsetX = scroller.currX.toFloat()
             offsetY = scroller.currY.toFloat()
             invalidate()
@@ -131,6 +135,8 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
     inner class CustomGestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onDown(e: MotionEvent?): Boolean {
+            // 每次 ACTION_DOWN 事件出现的时候都会被调用，在这里返回 true
+            // 可以保证必然消费掉事件
             return true
         }
 
@@ -151,6 +157,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
             return false
         }
 
+        //用于滑动时迅速抬起时被调用，用于用户希望控件进行惯性滑动的场景
         override fun onFling(
             e1: MotionEvent?,
             e2: MotionEvent?,
@@ -158,6 +165,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
             velocityY: Float
         ): Boolean {
             if (isScale) {
+                //初始化滑动
                 scroller.fling(
                     offsetX.toInt(), offsetY.toInt(), velocityX.toInt(), velocityY.toInt(),
                     (-(bitmap.width * bigScale - width) / 2).toInt(),
@@ -167,7 +175,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
                     30.dp.toInt(), 30.dp.toInt()
                 )
 
-                //下一帧会调用动画
+                //下一帧会刷新
                 ViewCompat.postOnAnimation(
                     this@CustomScalableImageView,
                     this@CustomScalableImageView
@@ -195,6 +203,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
 
     inner class CustomScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
 
+        //捏撑开始
         override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
             offsetX = (detector.focusX - width / 2) * (1 - bigScale / smallScale)
             offsetY = (detector.focusY - height / 2) * (1 - bigScale / smallScale)
@@ -202,10 +211,12 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         }
 
         override fun onScale(detector: ScaleGestureDetector): Boolean {
+            // 新的捏撑事件
             val tempCurrentScale = currentScale * detector.scaleFactor
             if (tempCurrentScale in smallScale..bigScale) {
                 currentScale = tempCurrentScale
                 isScale = true
+                //这个返回值表示「事件是否消耗」，即「这个事件算不算数」
                 return true
             }
             return false
