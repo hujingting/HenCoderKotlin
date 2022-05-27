@@ -38,9 +38,9 @@ val Int.dp
 fun getAvatar(resources: Resources, width: Int) : Bitmap {
     val options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
-    BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
+    BitmapFactory.decodeResource(resources, R.drawable.turning_red, options)
     options.inJustDecodeBounds = false
     options.inDensity = options.outWidth
     options.inTargetDensity = width
-    return BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
+    return BitmapFactory.decodeResource(resources, R.drawable.turning_red, options)
 }

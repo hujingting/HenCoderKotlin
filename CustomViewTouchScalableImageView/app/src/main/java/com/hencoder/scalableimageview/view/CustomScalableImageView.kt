@@ -23,8 +23,7 @@ private const val EXTRA_SCALE_FRACTION = 1.5f
 /**
  * 练习
  */
-class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs),
-    Runnable {
+class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs), Runnable {
 
     private val bitmap = getAvatar(resources, BITMAP_SIZE)
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -82,8 +81,8 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         }
 
         currentScale = smallScale
-        //这段代码的作用是什么？似乎不加也可以
-        scaleAnimator.setFloatValues(smallScale, bigScale)
+        //这段代码的作用是什么？貌似不加也能正常运行
+//        scaleAnimator.setFloatValues(smallScale, bigScale)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -131,7 +130,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         offsetY = max(offsetY, -(bitmap.height * bigScale - height) / 2)
     }
 
-    //抽出一个内部类
+    //双击放大和手指滑动的内部类
     inner class CustomGestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onDown(e: MotionEvent?): Boolean {
@@ -193,14 +192,17 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
                 offsetY = (e.y - height / 2) * (1 - bigScale / smallScale)
                 //边缘修正, 否则在图片边缘放大会留白
                 fixOffsetXY()
+                scaleAnimator.setFloatValues(smallScale, bigScale)
                 scaleAnimator.start()
             } else {
+                scaleAnimator.setFloatValues(smallScale, currentScale)
                 scaleAnimator.reverse()
             }
             return true
         }
     }
 
+    //双指缩放的内部类
     inner class CustomScaleGestureListener : ScaleGestureDetector.OnScaleGestureListener {
 
         //捏撑开始
@@ -211,7 +213,6 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         }
 
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            // 新的捏撑事件
             val tempCurrentScale = currentScale * detector.scaleFactor
             if (tempCurrentScale in smallScale..bigScale) {
                 currentScale = tempCurrentScale
@@ -223,7 +224,9 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         }
 
         override fun onScaleEnd(detector: ScaleGestureDetector) {
-            if (currentScale * detector.scaleFactor <= smallScale) {
+            println("currentScale-->$currentScale---small-->$smallScale")
+            //缩到小图会有误差，所以 +0.2
+            if (currentScale <= smallScale + 0.2) {
                 isScale = false
             }
         }

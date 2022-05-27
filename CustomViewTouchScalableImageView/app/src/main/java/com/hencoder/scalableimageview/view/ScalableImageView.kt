@@ -48,8 +48,8 @@ class ScalableImageView(context: Context?, attrs: AttributeSet?) : View(context,
   override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
     super.onSizeChanged(w, h, oldw, oldh)
 
-    originalOffsetX = (width - IMAGE_SIZE) / 2f
-    originalOffsetY = (height - IMAGE_SIZE) / 2f
+    originalOffsetX = (width - bitmap.width) / 2f
+    originalOffsetY = (height - bitmap.height) / 2f
 
     if (bitmap.width / bitmap.height.toFloat() > width / height.toFloat()) {
       smallScale = width / bitmap.width.toFloat()
