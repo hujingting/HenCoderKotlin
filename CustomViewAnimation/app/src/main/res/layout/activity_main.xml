@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.hencoder.animation.view.PointFView
+    <com.hencoder.animation.view.ClipAndCameraView
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
