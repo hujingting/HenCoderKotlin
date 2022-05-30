@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.hencoder.animation.R
 import com.hencoder.animation.dp
+import com.hencoder.animation.getAvatar
 
 private val BITMAP_SIZE = 200.dp
 private val BITMAP_PADDING = 100.dp
@@ -16,7 +17,7 @@ class ClipAndCameraView(context: Context?, attrs: AttributeSet?) : View(context,
 //  private val camera = Camera()
 
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val bitmap = getAvatar(BITMAP_SIZE.toInt())
+  private val bitmap = getAvatar(resources, BITMAP_SIZE.toInt())
   private val camera = Camera()
 
 //  init {
@@ -81,15 +82,5 @@ class ClipAndCameraView(context: Context?, attrs: AttributeSet?) : View(context,
 //    options.inTargetDensity = width
 //    return BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
 //  }
-
-  private fun getAvatar(width : Int) : Bitmap {
-    val options = BitmapFactory.Options()
-    options.inJustDecodeBounds = true
-    BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
-    options.inJustDecodeBounds = false
-    options.inDensity = options.outWidth
-    options.inTargetDensity = width
-    return BitmapFactory.decodeResource(resources, R.drawable.avatar_rengwuxian, options)
-  }
 
 }

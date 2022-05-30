@@ -5,7 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.hencoder.animation.view.ClipAndCameraView
+<!--    <com.hencoder.animation.view.ClipAndCameraView-->
+<!--        android:id="@+id/view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:src="@drawable/avatar_rengwuxian" />-->
+
+    <com.hencoder.animation.practice.ClipAndCameraView
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
