@@ -14,15 +14,15 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    val bottomClipAnimator = ObjectAnimator.ofFloat(view, "bottomClip", 60f)
+    val bottomClipAnimator = ObjectAnimator.ofFloat(view, "bottomFlip", 60f)
     bottomClipAnimator.startDelay = 1000
     bottomClipAnimator.duration = 2000
 
-    val flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 200f)
+    val flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 270f)
     flipRotationAnimator.startDelay = 1000
     flipRotationAnimator.duration = 2000
 
-    val topClipAnimator = ObjectAnimator.ofFloat(view, "topClip", -60f)
+    val topClipAnimator = ObjectAnimator.ofFloat(view, "topFlip", -60f)
     topClipAnimator.startDelay = 1000
     topClipAnimator.duration = 2000
 
@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
 //    val bottomFlipAnimator = ObjectAnimator.ofFloat(view, "bottomFlip", 60f)
 //    bottomFlipAnimator.startDelay = 1000
 //    bottomFlipAnimator.duration = 1000
-//
+//    bottomFlipAnimator.start()
+
 //    val flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 270f)
 //    flipRotationAnimator.startDelay = 200
 //    flipRotationAnimator.duration = 1000
