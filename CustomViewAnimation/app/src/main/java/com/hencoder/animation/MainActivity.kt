@@ -14,6 +14,22 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    val bottomClipAnimator = ObjectAnimator.ofFloat(view, "bottomClip", 60f)
+    bottomClipAnimator.startDelay = 1000
+    bottomClipAnimator.duration = 2000
+
+    val flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 200f)
+    flipRotationAnimator.startDelay = 1000
+    flipRotationAnimator.duration = 2000
+
+    val topClipAnimator = ObjectAnimator.ofFloat(view, "topClip", -60f)
+    topClipAnimator.startDelay = 1000
+    topClipAnimator.duration = 2000
+
+    val animatorSet = AnimatorSet()
+    animatorSet.playSequentially(bottomClipAnimator, flipRotationAnimator, topClipAnimator)
+    animatorSet.start()
+
     /*view.animate() // radius
       .translationX(200.dp) // setTranslationX(10) setTranslationX(20) setTranslationX(40)
       .translationY(100.dp)

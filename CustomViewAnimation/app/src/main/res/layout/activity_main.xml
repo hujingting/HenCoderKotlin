@@ -11,7 +11,7 @@
 <!--        android:layout_height="match_parent"-->
 <!--        android:src="@drawable/avatar_rengwuxian" />-->
 
-    <com.hencoder.animation.practice.ClipAndCameraView
+    <com.hencoder.animation.practice.CameraView
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
