@@ -6,6 +6,7 @@ import android.animation.TypeEvaluator
 import android.graphics.PointF
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.hencoder.animation.practice.ProvinceView
 import com.hencoder.animation.view.ProvinceEvaluator
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,21 +15,27 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
-    val bottomClipAnimator = ObjectAnimator.ofFloat(view, "bottomFlip", 60f)
-    bottomClipAnimator.startDelay = 1000
-    bottomClipAnimator.duration = 2000
+    val provinceAnimator = ObjectAnimator.ofObject(view, "province", ProvinceView.ProvinceEvaluator(), "西藏自治区")
+    provinceAnimator.startDelay = 1000
+    provinceAnimator.duration = 6000
+    provinceAnimator.start()
 
-    val flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 270f)
-    flipRotationAnimator.startDelay = 1000
-    flipRotationAnimator.duration = 2000
 
-    val topClipAnimator = ObjectAnimator.ofFloat(view, "topFlip", -60f)
-    topClipAnimator.startDelay = 1000
-    topClipAnimator.duration = 2000
-
-    val animatorSet = AnimatorSet()
-    animatorSet.playSequentially(bottomClipAnimator, flipRotationAnimator, topClipAnimator)
-    animatorSet.start()
+//    val bottomClipAnimator = ObjectAnimator.ofFloat(view, "bottomFlip", 60f)
+//    bottomClipAnimator.startDelay = 1000
+//    bottomClipAnimator.duration = 2000
+//
+//    val flipRotationAnimator = ObjectAnimator.ofFloat(view, "flipRotation", 270f)
+//    flipRotationAnimator.startDelay = 1000
+//    flipRotationAnimator.duration = 2000
+//
+//    val topClipAnimator = ObjectAnimator.ofFloat(view, "topFlip", -60f)
+//    topClipAnimator.startDelay = 1000
+//    topClipAnimator.duration = 2000
+//
+//    val animatorSet = AnimatorSet()
+//    animatorSet.playSequentially(bottomClipAnimator, flipRotationAnimator, topClipAnimator)
+//    animatorSet.start()
 
     /*view.animate() // radius
       .translationX(200.dp) // setTranslationX(10) setTranslationX(20) setTranslationX(40)
