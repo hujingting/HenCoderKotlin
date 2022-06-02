@@ -94,13 +94,13 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         return true
     }
 
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         //1. 图片放大之后相对应的坐标系也会变散，所以可以先执行 translate, 再放大图片，
         // 这样滑动图片才会跟手，否则需要考虑放大系数
-        //2. 这里 * scaleFraction，跟着动画系数变化 ，这样缩小图片的时候才不会留白回到正常位置，
-        // 相当于重置偏移量（scaleFraction = 0）
+        //2. 这里 * scaleFraction，跟着动画系数变化 ，这样缩小图片的时候才不会留白回到正常位置
 //        canvas.translate(offsetX * scaleFraction, offsetY * scaleFraction)
 //        val scale = smallScale + scaleFraction * (bigScale - smallScale)
         val scaleFraction = (currentScale - smallScale) / (bigScale - smallScale)
@@ -123,6 +123,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
         }
     }
 
+    //边缘修正偏移量
     private fun fixOffsetXY() {
         offsetX = min(offsetX, (bitmap.width * bigScale - width) / 2)
         offsetX = max(offsetX, -(bitmap.width * bigScale - width) / 2)
@@ -225,7 +226,7 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
 
         override fun onScaleEnd(detector: ScaleGestureDetector) {
             println("currentScale-->$currentScale---small-->$smallScale")
-            //缩到小图会有误差，所以 +0.2
+            //缩到最小图会有误差，所以 +0.2
             if (currentScale <= smallScale + 0.2) {
                 isScale = false
             }

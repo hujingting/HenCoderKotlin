@@ -72,5 +72,6 @@ class CameraView(context: Context?, attrs: AttributeSet?) : View(context, attrs)
         canvas.translate(- (BITMAP_W / 2 + MARGIN), - (BITMAP_W / 2 + MARGIN))
         canvas.drawBitmap(bitmap, MARGIN, MARGIN, paint)
         canvas.restore()
+
     }
 }
