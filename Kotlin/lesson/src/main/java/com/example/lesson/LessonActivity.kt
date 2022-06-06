@@ -1,5 +1,6 @@
 package com.example.lesson
 
+import android.animation.AnimatorSet
 import androidx.appcompat.app.AppCompatActivity
 import com.example.core.BaseView
 import com.example.lesson.LessonPresenter
@@ -60,6 +61,7 @@ class LessonActivity : AppCompatActivity(), BaseView<LessonPresenter>,
 //        refreshLayout = findViewById(R.id.swipe_refresh_layout)
 //        refreshLayout.setOnRefreshListener(OnRefreshListener { getPresenter().fetchData() })
 //        refreshLayout.isRefreshing = true
+
 
         p.fetchData()
     }
