@@ -1,2 +1,2 @@
 # HenCoderKotlin
-kotlin基础项目练习
+HenCoder项目练习
