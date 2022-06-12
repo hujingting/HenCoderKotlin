@@ -23,7 +23,7 @@ private const val EXTRA_SCALE_FRACTION = 1.5f
 /**
  * 练习
  */
-class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs), Runnable {
+class PracticeScalableImageView(context: Context?, attrs: AttributeSet?) : View(context, attrs), Runnable {
 
     private val bitmap = getAvatar(resources, BITMAP_SIZE)
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -177,8 +177,8 @@ class CustomScalableImageView(context: Context?, attrs: AttributeSet?) : View(co
 
                 //下一帧会刷新
                 ViewCompat.postOnAnimation(
-                    this@CustomScalableImageView,
-                    this@CustomScalableImageView
+                    this@PracticeScalableImageView,
+                    this@PracticeScalableImageView
                 )
             }
             return false
