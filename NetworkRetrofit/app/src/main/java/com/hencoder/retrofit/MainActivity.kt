@@ -1,6 +1,8 @@
 package com.hencoder.retrofit
 
+import android.app.Activity
 import android.os.Bundle
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -37,5 +39,9 @@ class MainActivity : AppCompatActivity() {
 
     val reposRx = service.listReposRx("octocat")
 //    reposRx.subscribe()
+  }
+
+  override fun onResume() {
+    super.onResume()
   }
 }
