@@ -22,11 +22,11 @@ class LessonPresenter(private var activity: LessonActivity?) {
             override fun onSuccess(lessons: List<Lesson?>) {
                 //引用外部类
                 this@LessonPresenter.lessons = lessons
-                activity!!.runOnUiThread { activity!!.showResult(lessons) }
+//                activity!!.runOnUiThread { activity!!.showResult(lessons) }
             }
 
             override fun onFailure(message: String?) {
-                activity!!.runOnUiThread { toast(message!!) }
+//                activity!!.runOnUiThread { toast(message!!) }
             }
         })
     }

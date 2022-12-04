@@ -153,7 +153,6 @@ class PracticeScalableImageView(context: Context?, attrs: AttributeSet?) : View(
                 fixOffsetXY()
                 invalidate()
             }
-
             return false
         }
 
