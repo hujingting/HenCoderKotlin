@@ -1,4 +1,4 @@
-package com.example.firstcomposedemo
+package com.example.firstcomposedemo.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle

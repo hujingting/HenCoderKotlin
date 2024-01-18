@@ -1,15 +1,12 @@
-package com.example.firstcomposedemo
+package com.example.firstcomposedemo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,8 +40,6 @@ class PracticeActivityOne : ComponentActivity() {
 
             val processName by remember { derivedStateOf { name.uppercase() } }
 //            val processName = remember(name) { name.uppercase() }
-
-            
             
             Text(processName, modifier = Modifier.clickable {
                 name = "jingting"

@@ -1,4 +1,4 @@
-package com.example.firstcomposedemo.ui.theme
+package com.example.firstcomposedemo.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

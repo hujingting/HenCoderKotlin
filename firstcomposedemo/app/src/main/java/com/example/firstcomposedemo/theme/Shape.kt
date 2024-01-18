@@ -1,4 +1,4 @@
-package com.example.firstcomposedemo.ui.theme
+package com.example.firstcomposedemo.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
