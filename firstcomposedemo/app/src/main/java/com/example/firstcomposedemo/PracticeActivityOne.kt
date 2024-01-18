@@ -43,6 +43,8 @@ class PracticeActivityOne : ComponentActivity() {
 
             val processName by remember { derivedStateOf { name.uppercase() } }
 //            val processName = remember(name) { name.uppercase() }
+
+            
             
             Text(processName, modifier = Modifier.clickable {
                 name = "jingting"
